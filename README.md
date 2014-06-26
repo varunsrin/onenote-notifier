@@ -17,17 +17,20 @@ to recipients. It has a partial object model implemented entirely in Python 3.
 * Windows 7 with Python 3.x
 * OneNote 2013 or 2010 with your notebooks open
 * Outlook 2013 with your email account set up
+* [OnePy 0.1] (https://www.github.com/varunsrin/onepy)
 
 
 #### How do I set up my environment?
 
 * Install Python 3.4 x86 from [here](https://www.python.org/download/releases/3.4.0/) 
 * Install PyWin32 for Python 3.4 x86 from [here](http://sourceforge.net/projects/pywin32/files/pywin32/) 
-* Add C:\Python34\ to your PATH variable
-* Run C:\Python34\Lib\site-packages\win32com\client\makepy.py
-* Select 'Microsoft OneNote 15.0 Extended Type Library'
+* Add `C:\Python34\` & `C:\Python34\Scripts\` your PATH variable
+* Run `C:\Python34\Lib\site-packages\win32com\client\makepy.py`
+* Select `Microsoft OneNote 15.0 Extended Type Library`
+* Run `pip install onepy`
 
-Still having trouble? Check this [SO Post](http://stackoverflow.com/questions/16287432/python-pywin-onenote-com-onenote-application-15-cannot-automate-the-makepy-p)
+
+Having trouble with Dispatch? Check this [SO Post](http://stackoverflow.com/questions/16287432/python-pywin-onenote-com-onenote-application-15-cannot-automate-the-makepy-p)
 
 
 #### How do I send notifications?
