@@ -1,4 +1,4 @@
-import application
+import onepy
 import datetime
 import sys
 import win32com.client
@@ -84,7 +84,7 @@ def construct_folder_html(folder, changes):
 
 def construct_breadcrumb(object):
     """Constructs HTML breadcrumb for sections"""
-    if type(object.parent) == application.SectionGroup:
+    if type(object.parent) == onepy.SectionGroup:
         link = "<a href = '" + on.process.GetHyperlinkToObject(object.parent.id) + "' >" + object.parent.name + "</a> / "
         return (link + construct_breadcrumb(object.parent))
     else:
@@ -146,9 +146,9 @@ def folder_handler(folder):
     
     for child in folder:
         if is_newer_than(child):
-            if (type(child) == application.Section):
+            if (type(child) == onepy.Section):
                 changes += section_handler(child)
-            elif (type(child) == application.SectionGroup):
+            elif (type(child) == onepy.SectionGroup):
                 changes += folder_handler (child)
 
 
@@ -203,7 +203,7 @@ def page_content_handler(pageID):
     authors = set()
     # Title could be a child of page, what do we wnt to do here?
     for child in page:
-        if (type(child) == application.Outline):
+        if (type(child) == onepy.Outline):
             if is_newer_than(child):
                 for oe in child:
                     c, a = count_oe_changes(oe)
@@ -241,6 +241,6 @@ def count_oe_changes(oe):
 
 #Main
 
-on = application.OneNote()
+on = onepy.OneNote()
 outlook_process = win32com.client.gencache.EnsureDispatch(OUTLOOK_VERSION)
 
