@@ -4,6 +4,9 @@ import sys
 import win32com.client
 
 
+OUTLOOK_VERSION = "Outlook.Application.15"
+
+
 #
 # HELPER FUNCTIONS
 #
@@ -74,7 +77,7 @@ def generate_margin(margin):
 
 def construct_folder_html(folder, changes):
     """ Takes in a folder object, integer value for margin &  a list of text changes & generates formatted HTML to place in an email"""
-    #folder_link =  "<a href = '" + on.server.GetHyperlinkToObject(folder.id) + "' >" + folder.name + " </a> <br/>"
+    #folder_link =  "<a href = '" + on.process.GetHyperlinkToObject(folder.id) + "' >" + folder.name + " </a> <br/>"
     #Enforcing Segoe UI font
     return ("<font face = 'Segoe UI'>" + changes + "</font>") 
 
@@ -82,19 +85,19 @@ def construct_folder_html(folder, changes):
 def construct_breadcrumb(object):
     """Constructs HTML breadcrumb for sections"""
     if type(object.parent) == application.SectionGroup:
-        link = "<a href = '" + on.server.GetHyperlinkToObject(object.parent.id) + "' >" + object.parent.name + "</a> / "
+        link = "<a href = '" + on.process.GetHyperlinkToObject(object.parent.id) + "' >" + object.parent.name + "</a> / "
         return (link + construct_breadcrumb(object.parent))
     else:
         return ""
 
 
 def construct_section_html(section, changes):
-    section_link =  "<a href = '" + on.server.GetHyperlinkToObject(section.id) + "' >" + section.name + " </a><br/><br/>"
+    section_link =  "<a href = '" + on.process.GetHyperlinkToObject(section.id) + "' >" + section.name + " </a><br/><br/>"
     return ("<font color = '#D9D9D9'>---------------------------------</font>" + "<br/>" + construct_breadcrumb(section) + section_link+ changes) 
         
 
 def construct_page_html(page, changes):
-    page_link = "<a href = '" + on.server.GetHyperlinkToObject(page.id) + "' >" + page.name + "</a> - "
+    page_link = "<a href = '" + on.process.GetHyperlinkToObject(page.id) + "' >" + page.name + "</a> - "
     hours = round( is_newer_than(page).seconds / 3600 )
     page_changed_at =  "<span style='font-style: italic;'>%d %s ago </span>"  % (hours, "Hour" if hours==1 else "Hours")
     page_recent_changes =  "<font color = '#7F7F7F'>"+ changes + "</font><br/>"
@@ -109,13 +112,13 @@ def construct_page_html(page, changes):
 # EMAIL HELPERS
 #
 
-def send_email(to, subject, body):
+def send_email(to, subject, body, from_name):
     """ Takes in recipients, subject and body and sends out an email using the global outlook process """
 
     FOOTER = ("<font color = '#D9D9D9' face = 'Segoe UI'>---------------------------------</font><br/>" +
               "<span style='font-size: 12px; font-family: Segoe UI; color: #7F7F7F;'>" +
               "This e-mail was automatically generated. To unsubscribe, get the " +
-              "source, report bugs or request features, contact __person__ </span>")
+              "source, report bugs or request features, contact " + from_name + " </span>")
     
     email = outlook_process.CreateItem(0)
     email.To = to
@@ -124,10 +127,10 @@ def send_email(to, subject, body):
     email.Display()
         
 
-def dispatch_emails (recipients, notebook_nickname):
+def dispatch_emails (recipients, notebook_nickname, from_name):
     email_body = get_changes_in_notebook(notebook_nickname)
     if email_body != "":
-        send_email(recipients, "Recent Changes in " + notebook_nickname, email_body)
+        send_email(recipients, "Recent Changes in " + notebook_nickname, email_body, from_name)
     else:
         print("No changes were found")
 
@@ -239,5 +242,5 @@ def count_oe_changes(oe):
 #Main
 
 on = application.OneNote()
-outlook_process = win32com.client.gencache.EnsureDispatch("Outlook.Application.14")
+outlook_process = win32com.client.gencache.EnsureDispatch(OUTLOOK_VERSION)
 
