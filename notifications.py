@@ -77,7 +77,7 @@ def generate_margin(margin):
 
 def construct_folder_html(folder, changes):
     """ Takes in a folder object, integer value for margin &  a list of text changes & generates formatted HTML to place in an email"""
-    #folder_link =  "<a href = '" + on.process.GetHyperlinkToObject(folder.id) + "' >" + folder.name + " </a> <br/>"
+    #folder_link =  "<a href = '" + on.process.get_hyperlink_to_object(folder.id) + "' >" + folder.name + " </a> <br/>"
     #Enforcing Segoe UI font
     return ("<font face = 'Segoe UI'>" + changes + "</font>") 
 
@@ -85,19 +85,19 @@ def construct_folder_html(folder, changes):
 def construct_breadcrumb(object):
     """Constructs HTML breadcrumb for sections"""
     if type(object.parent) == onepy.SectionGroup:
-        link = "<a href = '" + on.process.GetHyperlinkToObject(object.parent.id) + "' >" + object.parent.name + "</a> / "
+        link = "<a href = '" + on.process.get_hyperlink_to_object(object.parent.id) + "' >" + object.parent.name + "</a> / "
         return (link + construct_breadcrumb(object.parent))
     else:
         return ""
 
 
 def construct_section_html(section, changes):
-    section_link =  "<a href = '" + on.process.GetHyperlinkToObject(section.id) + "' >" + section.name + " </a><br/><br/>"
+    section_link =  "<a href = '" + on.process.get_hyperlink_to_object(section.id) + "' >" + section.name + " </a><br/><br/>"
     return ("<font color = '#D9D9D9'>---------------------------------</font>" + "<br/>" + construct_breadcrumb(section) + section_link+ changes) 
         
 
 def construct_page_html(page, changes):
-    page_link = "<a href = '" + on.process.GetHyperlinkToObject(page.id) + "' >" + page.name + "</a> - "
+    page_link = "<a href = '" + on.process.get_hyperlink_to_object(page.id) + "' >" + page.name + "</a> - "
     hours = round( is_newer_than(page).seconds / 3600 )
     page_changed_at =  "<span style='font-style: italic;'>%d %s ago </span>"  % (hours, "Hour" if hours==1 else "Hours")
     page_recent_changes =  "<font color = '#7F7F7F'>"+ changes + "</font><br/>"

@@ -17,7 +17,7 @@ to recipients. It has a partial object model implemented entirely in Python 3.
 * Windows 7 with Python 3.x
 * OneNote 2013 or 2010 with your notebooks open
 * Outlook 2013 with your email account set up
-* [OnePy 0.1] (https://www.github.com/varunsrin/onepy)
+* [OnePy 0.2] (https://www.github.com/varunsrin/onepy)
 
 
 #### How do I set up my environment?
