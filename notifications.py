@@ -6,7 +6,6 @@ import win32com.client
 
 OUTLOOK_VERSION = "Outlook.Application.15"
 
-
 #
 # HELPER FUNCTIONS
 #
@@ -21,7 +20,6 @@ def find_notebook_by_nickname(name, hierarchy):
     return None
 
 
-
 # In Python 3.2 the strptime() handling of non-standard characters is broken - since we have a trailing Z, it breaks
 #This method approximates by discarding microseconds & timezone - since we always report time in Z, this is a non-issue
 #Refactor this when the bug in Python 3.2 is resolved
@@ -30,7 +28,6 @@ def parse_datetime(datetime_string):
     dt, foo, bar = datetime_string.partition(".")
     return datetime.datetime.strptime(dt, "%Y-%m-%dT%H:%M:%S")
     
-
 
 # Checks to see if the given datetime stamp is newer than X seconds
 # Returns the difference in seconds
@@ -53,19 +50,15 @@ def get_author_recursive(object):
         return(get_author_recursive(object.parent))
 
 
-
 def get_changes_in_notebook(notebook_nickname):
     """Takes a notebook nickname & a reference to the hierarchy and returns changes within that notebook """
     nbk = find_notebook_by_nickname(notebook_nickname, on.hierarchy)
     return folder_handler(nbk)
 
 
-
-
 #
 # HTML FORMATTING HELPERS
 #
-
 
 def generate_margin(margin):
     """ Generates a margin from an integer value"""
@@ -107,7 +100,6 @@ def construct_page_html(page, changes):
             html_margin + page_recent_changes + "</span><br/>")
 
 
-
 #
 # EMAIL HELPERS
 #
@@ -135,7 +127,6 @@ def dispatch_emails (recipients, notebook_nickname, from_name):
         print("No changes were found")
 
 
-
 #
 # HANDLER FUNCTIONS
 # These parse through different types of OneNote objects, letting us know if there were any changes
@@ -150,16 +141,11 @@ def folder_handler(folder):
                 changes += section_handler(child)
             elif (type(child) == onepy.SectionGroup):
                 changes += folder_handler (child)
-
-
-
                 
     if changes == "":
         return changes
     else:
         return (construct_folder_html(folder, changes))
-
-
 
 
 # Section  - this returns a section string or a false if the pages contain no changes. Calls pages.
@@ -171,12 +157,10 @@ def section_handler(section):
         if is_newer_than(page):
             changes += page_handler(page)
 
-            
     if changes == "":
         return changes
     else:
         return (construct_section_html(section, changes))
-
 
 
 # Pages - this returns a page string or false if the pagecontent has no changes. Calls page content
@@ -194,8 +178,6 @@ def page_handler(page):
 def new_page_handler(page):
     pass
     
-
-
 
 def page_content_handler(pageID):
     page = on.get_page_content(pageID)
@@ -218,8 +200,6 @@ def page_content_handler(pageID):
         return result
 
 
-
-
 def count_oe_changes(oe):
     """Returns the number of changes made within the OE, and a set of unique authors for those changes """
     changes = 0
@@ -237,10 +217,7 @@ def count_oe_changes(oe):
     return changes, authors
 
 
-
-
-#Main
-
+# Execute
 on = onepy.OneNote()
 outlook_process = win32com.client.gencache.EnsureDispatch(OUTLOOK_VERSION)
 
